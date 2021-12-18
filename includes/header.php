@@ -6,8 +6,8 @@
     <link type="text/css" rel="stylesheet" href="<?php echo $GLOBALS['_path'] ?>assets/fonts/material-icon/material-icon.css">
     <link type="text/css" rel="stylesheet" href="<?php echo $GLOBALS['_path'] ?>assets/css/materialize.min.css" media="screen,projection" />
     <link type="text/css" rel="stylesheet" href="<?php echo $GLOBALS['_path'] ?>assets/css/style.css" />
-    <!-- <link type="text/css" rel="stylesheet" href="<?php echo $GLOBALS['_path'] ?>assets/css/jtable.css" /> -->
-    <link type="text/css" rel="stylesheet" href="<?php echo $GLOBALS['_path'] ?>auth/assets/plane.css" />
+     <link type="text/css" rel="stylesheet" href="<?php echo $GLOBALS['_path'] ?>assets/css/jtable.css" />
+    <link type="text/css" rel="stylesheet" href="<?php echo $GLOBALS['_path'] ?>assets/css/plane.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex">
 </head>

@@ -1,14 +1,22 @@
 <?php
 
-function check($query, $err, $emt = false, $html = true)
+function check($query, $err = '', $html = true)
 {
-	if (!isset($_POST[$query])) {
-		err($err, false);
-	}
-	if (!$emt && empty($_POST[$query])) {
-		err($err . ' (Empty field !)', false);
-	}
-	$_POST[$query] = test_input($_POST[$query], $html);
+    if (is_array($query))
+        foreach ($query as $q)
+            _checkPostValue($q, $err, $html);
+    else
+        _checkPostValue($query, $err, $html);
+}
+
+function _checkPostValue(string $q, $err, $html )
+{
+    if (!isset($_POST[$q])) {
+        if ($err == '')
+            $err = str_replace('_', ' ', ucwords($q, '_')) . ' required';
+        err($err, 400);
+    }
+    $_POST[$q] = test_input($_POST[$q], $html);
 }
 
 function test_input($data, $html)

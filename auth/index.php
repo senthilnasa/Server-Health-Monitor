@@ -38,7 +38,7 @@ if (isset($_SESSION['islogin']) &&  $_SESSION['islogin'] == true) {
     <link type="text/css" rel="stylesheet" href="../assets/fonts/material-icon/material-icon.css">
     <link type="text/css" rel="stylesheet" href="../assets/css/materialize.min.css" media="screen,projection" />
     <link type="text/css" rel="stylesheet" href="../assets/css/style.css" />
-    <link type="text/css" rel="stylesheet" href="../assets/css/assets/plane.css" />
+    <link type="text/css" rel="stylesheet" href="../assets/css/plane.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex">
 </head>

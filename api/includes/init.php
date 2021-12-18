@@ -3,9 +3,9 @@
 require_once __DIR__ . '/response.php';
 require_once __DIR__ . '/_db.php';
 require_once __DIR__ . '/function.php';
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 // if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 //   err("Invlaid Request");

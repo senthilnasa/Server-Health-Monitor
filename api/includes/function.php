@@ -59,7 +59,7 @@ function pass_reset($email,$key,$password){
 function log_user($db, $id, $state)
 {
 	$ip = get_client_ip();
-	$db->insert("INSERT INTO user_login_log(user_id,state,ip) VALUES((SELECT `user_id` FROM user_master WHERE user_name=?),?,?)", [$id, $state, $ip]);
+	$db->insert("INSERT INTO user_login_log(user_id,state,url) VALUES((SELECT `user_id` FROM user_master WHERE user_name=?),?,?)", [$id, $state, $ip]);
 }
 
 function salt($length = 10)
@@ -83,7 +83,7 @@ function dashboard_data()
 	(SELECT  COUNT(*) FROM server_master WHERE live=1 AND state=1)AS d2,
 	(SELECT  COUNT(*) FROM server_master WHERE live=0 AND state=1)AS d3,
 	(SELECT created_at FROM server_ping_log ORDER BY created_at DESC LIMIT 1)AS d4
-	", []);
+	");
 	$data[0]['d4'] = timeAgo(strtotime($data[0]['d4']));
 	$data[0]['d3'] = floatval($data[0]['d3']);
 	$data[0]['d3'] = intval($data[0]['d3']);
@@ -94,13 +94,13 @@ function dashboard_data()
 function dashboard_chart_online()
 {
 	$db = new CRUD;
-	return $db->select("SELECT ROUND(UNIX_TIMESTAMP(created_at))AS x,COUNT(DISTINCT  server_id)AS y,FLOOR(UNIX_TIMESTAMP(created_at)/(15 * 60)) AS timekey FROM server_ping_log WHERE state=1 GROUP BY timekey", []);
+	return $db->select("SELECT ROUND(UNIX_TIMESTAMP(created_at))AS x,COUNT(DISTINCT  server_id)AS y,FLOOR(UNIX_TIMESTAMP(created_at)/(15 * 60)) AS timekey FROM server_ping_log WHERE state=1 GROUP BY timekey");
 }
 
 function dashboard_chart_offline()
 {
 	$db = new CRUD;
-	return $db->select("SELECT  ROUND(UNIX_TIMESTAMP(created_at))AS x,COUNT(DISTINCT  server_id)AS y,FLOOR(UNIX_TIMESTAMP(created_at)/(15 * 60)) AS timekey FROM server_ping_log WHERE state=0 GROUP BY timekey", []);
+	return $db->select("SELECT  ROUND(UNIX_TIMESTAMP(created_at))AS x,COUNT(DISTINCT  server_id)AS y,FLOOR(UNIX_TIMESTAMP(created_at)/(15 * 60)) AS timekey FROM server_ping_log WHERE state=0 GROUP BY timekey");
 }
 
 function servers_dash_list($a)
@@ -112,13 +112,13 @@ function servers_dash_list($a)
 function server_list()
 {
 	$db = new CRUD;
-	return $db->select("SELECT  `ip`,`server_id`,`server_name`,`type`,`last_offline`,`last_online`,`state`,`latency` FROM server_master", []);
+	return $db->select("SELECT `url` ip,`server_id`,`server_name`,`type`,`last_offline`,`last_online`,`state`,`latency` FROM server_master");
 }
 
 function users_list()
 {
 	$db = new CRUD;
-	return $db->select("SELECT user_id,user_name,name,telegram_id,email,role,created_at FROM user_master", []);
+	return $db->select("SELECT user_id,user_name,name,telegram_id,email,role,created_at FROM user_master");
 }
 
 function user_update($user_id, $mail, $name, $tid)
@@ -151,13 +151,13 @@ function login_log()
 {
 	$db = new CRUD;
 	$u = $_SESSION['user_id'];
-	return $db->select("SELECT ROUND(UNIX_TIMESTAMP(created_at))AS x,`state`,ip FROM `user_login_log` WHERE user_id=? order by created_at desc ", [$u]);
+	return $db->select("SELECT ROUND(UNIX_TIMESTAMP(created_at))AS x,`state`, ip FROM `user_login_log` WHERE user_id=? order by created_at desc ", [$u]);
 }
 
 function notification_log()
 {
 	$db = new CRUD;
-	return $db->select("SELECT m.*,ROUND(UNIX_TIMESTAMP(m.created_at) * 1000)AS x,s.`server_name` FROM notification_log m INNER JOIN server_master s ON s.server_id=m.server_id", []);
+	return $db->select("SELECT m.*,ROUND(UNIX_TIMESTAMP(m.created_at) * 1000)AS x,s.`server_name` FROM notification_log m INNER JOIN server_master s ON s.server_id=m.server_id");
 }
 
 
@@ -219,7 +219,7 @@ function server_report($sid)
 function server_add($server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out)
 {
 	$db = new CRUD;
-	if ($db->insert("INSERT INTO server_master(server_name,ip,type,telegram,state,email,threshold,time_out) VALUES(?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out])) {
+	if ($db->insert("INSERT INTO server_master(server_name,url,type,telegram,state,email,threshold,time_out) VALUES(?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out])) {
 		return true;
 	}
 	return false;
@@ -229,7 +229,7 @@ function server_add($server_name, $ip, $type, $telegram, $state, $email,$thresho
 function server_add_s($server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$port)
 {
 	$db = new CRUD;
-	if ($db->insert("INSERT INTO server_master(server_name,ip,type,telegram,state,email,threshold,time_out,port) VALUES(?,?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$port])) {
+	if ($db->insert("INSERT INTO server_master(server_name,url,type,telegram,state,email,threshold,time_out,port) VALUES(?,?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$port])) {
 		return true;
 	}
 	return false;
@@ -238,7 +238,7 @@ function server_add_s($server_name, $ip, $type, $telegram, $state, $email,$thres
 function server_add_w($server_name,$ip,$type,$telegram,$state,$email,$threshold,$time_out,$method,$post_field,$header_name,$header_value,$redirect_type,$ssl,$user_name,$user_pass)
 {
 	$db = new CRUD;
-	if ($db->insert("INSERT INTO server_master(server_name,ip,type,telegram,state,email,threshold,time_out,method,post_field,header_name,header_value,redirect_type,`ssl`,`user_name`,`user_pass`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$method,$post_field,$header_name,$header_value,$redirect_type,$ssl,$user_name,$user_pass])) {
+	if ($db->insert("INSERT INTO server_master(server_name,url,type,telegram,state,email,threshold,time_out,method,post_field,header_name,header_value,redirect_type,`ssl`,`user_name`,`user_pass`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$method,$post_field,$header_name,$header_value,$redirect_type,$ssl,$user_name,$user_pass])) {
 		return true;
 	}
 	return false;
@@ -246,21 +246,21 @@ function server_add_w($server_name,$ip,$type,$telegram,$state,$email,$threshold,
 function server_update($sid, $server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out)
 {
 	$db = new CRUD;
-	$db->update("UPDATE server_master SET `server_name`=?,ip=?,`port`=NULL ,`type`=?,telegram=?,state=?,email=?,method=null,post_field=NULL,header_name=NULL,header_value=NULL,user_name=NULL,user_pass=NULL,redirect_type=0,threshold=?,`ssl`=0,time_out=? WHERE server_id=?", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out, $sid]);
+	$db->update("UPDATE server_master SET `server_name`=?,url=?,`port`=NULL ,`type`=?,telegram=?,state=?,email=?,method=null,post_field=NULL,header_name=NULL,header_value=NULL,user_name=NULL,user_pass=NULL,redirect_type=0,threshold=?,`ssl`=0,time_out=? WHERE server_id=?", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out, $sid]);
 	return true;
 }
 
 function server_update_s($sid, $server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$port)
 {
 	$db = new CRUD;
-	$db->update("UPDATE server_master SET `server_name`=?,ip=? ,`type`=?,telegram=?,state=?,email=?,method=null,post_field=NULL,header_name=NULL,header_value=NULL,user_name=NULL,user_pass=NULL,redirect_type=0,threshold=?,`ssl`=0,time_out=?,`port`=? WHERE server_id=?", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$port ,$sid]);
+	$db->update("UPDATE server_master SET `server_name`=?,url=? ,`type`=?,telegram=?,state=?,email=?,method=null,post_field=NULL,header_name=NULL,header_value=NULL,user_name=NULL,user_pass=NULL,redirect_type=0,threshold=?,`ssl`=0,time_out=?,`port`=? WHERE server_id=?", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$port ,$sid]);
 	return true;
 }
 
 function server_update_w($sid,$server_name,$ip,$type,$telegram,$state,$email,$threshold,$time_out,$method,$post_field,$header_name,$header_value,$user_name,$user_pass,$redirect_type,$ssl)
 {
 	$db = new CRUD;
-	$db->update("UPDATE server_master SET `server_name`=?,ip=?,`port`=NULL ,`type`=?,telegram=?,state=?,email=?,threshold=?,time_out=?,method=?,post_field=?,header_name=?,header_value=?,user_name=?,user_pass=?,redirect_type=?,`ssl`=? WHERE server_id=?",[$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$method,$post_field,$header_name,$header_value,$user_name,$user_pass,$redirect_type,$ssl, $sid]);
+	$db->update("UPDATE server_master SET `server_name`=?,url=?,`port`=NULL ,`type`=?,telegram=?,state=?,email=?,threshold=?,time_out=?,method=?,post_field=?,header_name=?,header_value=?,user_name=?,user_pass=?,redirect_type=?,`ssl`=? WHERE server_id=?",[$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$method,$post_field,$header_name,$header_value,$user_name,$user_pass,$redirect_type,$ssl, $sid]);
 	return true;
 }
 function server_delete($sid)

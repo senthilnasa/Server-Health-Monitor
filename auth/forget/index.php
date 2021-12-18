@@ -1,6 +1,6 @@
 <?php
 
-if (!file_exists("../../config.php")) {
+if (!file_exists(__DIR__."/../../config.php")) {
     header("Location: ../../install", true);
     die();
 }

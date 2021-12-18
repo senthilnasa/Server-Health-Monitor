@@ -179,27 +179,33 @@ require_once __DIR__ . "/check.php";
 
                             <div class="row center">
 
+
                                     <div class="input-field col s12">
                                         <i class="material-icons prefix">person_outlined</i>
-                                        <input id="u1" autocomplete="off" type="text" class="validate" required>
+                                        <input id="u5" autocomplete="off" value="Senthil Prabhu" type="text" class="validate" required>
+                                        <label for="u5">Your Name</label>
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix">person_outlined</i>
+                                        <input id="u1" autocomplete="off" value="root" type="text" class="validate" required>
                                         <label for="u1">User Name</label>
                                     </div>
 
                                     <div class="input-field col s12">
                                         <i class="material-icons prefix">lock_outlined</i>
-                                        <input id="u2" type="password" class="validate" required>
+                                        <input id="u2" type="password" value="Root@123$" class="validate" required>
                                         <label for="u2">Password</label>
                                     </div>
 
                                     <div class="input-field col s12">
                                         <i class="material-icons prefix">lock_outlined</i>
-                                        <input id="u3" type="password" class="validate" required>
+                                        <input id="u3" type="password" value="Root@123$" class="validate" required>
                                         <label for="u3">Password Repeat</label>
                                     </div>
 
                                     <div class="input-field col s12">
                                         <i class="material-icons prefix">lock_outlined</i>
-                                        <input id="u4" type="mail" class="validate" required>
+                                        <input id="u4" type="email" value="nasa@ma.com" class="validate" required>
                                         <label for="u4">Email Id</label>
                                     </div>
 

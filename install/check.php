@@ -3,9 +3,9 @@
 if(file_exists(__DIR__."/../config.php")){
     require __DIR__.'/../config.php';
 
-    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME,DB_PORT);
     if($mysqli -> connect_errno) {
-        echo "ko";
+        echo "ok";
     }
     else{
         $result = $mysqli->query("SELECT m.`name` FROM user_master m");
@@ -13,7 +13,6 @@ if(file_exists(__DIR__."/../config.php")){
             die('<meta http-equiv="refresh" content="0;url=../auth/" />');
         }else{
             register_shutdown_function('configDone');
-           
         }
     }
 

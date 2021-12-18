@@ -8,23 +8,19 @@ check('fun','Type Required');
 extract($_POST);
 switch($fun) {
     case 'verify_login':
-    check('login','Login  Required !');
-    check('pass','Password Required !');
+    check(['login','pass'],'Invalid Request !');   
     extract($_POST);
     verify_login($login,$pass);
     break;
 
     case 'reset_pass':
-    check('login','Login  Required !');
+    check('login','Invalid Request !');
     extract($_POST);
     reset_login($login);
     break;
 
     case 'pass_reset':
-    check('email','Email  Required !');
-    check('key','Reset key  Required !');
-    check('password','password  Required !');
-    check('new_password','new_password  Required !');
+    check(['email','key','password','new_password',],'Invalid Request !');   
     extract($_POST);
     if($password!=$new_password){
         err('Both password should same !');

@@ -7,7 +7,7 @@ require_once __DIR__ . '/utils/init.php';
 
 $db = new CRUD;
 
-$datas = $db->select("SELECT * FROM server_master WHERE state=1", []);
+$datas = $db->select("SELECT *,url ip FROM server_master WHERE state=1", []);
 
 $final=array();
 

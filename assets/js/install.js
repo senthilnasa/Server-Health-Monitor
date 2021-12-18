@@ -39,8 +39,9 @@
             configDiv.hide();
             loadTab.fadeIn();
 
+            
             let data = {
-                'fun': 'verify_login',
+                'fun': 'test_db',
                 'd1': d1,
                 'd2': d2,
                 'd3': d3,
@@ -71,6 +72,8 @@
             u2 = $('#u2').val();
             u3 = $('#u3').val();
             u4 = $('#u4').val();
+            u5 = $('#u5').val();
+            
             if (u1.length < 3) {
                 return toast('Invalid User Name ! \n set Minium 4 digit');
             }
@@ -78,24 +81,24 @@
                 return toast('Invalid Password ! \n set Minium 8 digit');
             }
 
-            if (u3==u2) {
-                return toast('Invalid Rep-Password !');
+            if (u3!=u2) {
+                return toast('Both Password Should be Same !');
             }
 
             if (!validateEmail(u4)) {
-                return toast('Invaliu ub name !');
+                return toast('Invalid Mail Id !');
             }
             
 
 
             configAdminUserDiv.hide();
             loadTab.fadeIn();
-
             let data = {
-                'fun': 'verify_login',
-                'u1': u1,
-                'u2': u2,
-                'u3': u4,
+                'fun': 'add_user',
+                'uname': u1,
+                'pass': u2,
+                'mail': u4,
+                'name': u5,
             };
 
             let func = () => {
