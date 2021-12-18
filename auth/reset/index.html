@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Server Health Monitor</title>
+    <link rel='stylesheet' href='../../assets/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="../../assets/css/forget.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
+                <form class="form-horizontal mar-top-bot-50" id="php_aut"><img src="../../assets/images/load.gif" id="loding" style="display:none;">
+                    <fieldset id="form-ve">
+                        <img class="col s12" src="../../assets/images/logo.png" width="100%">                        <h2 style="text-align:center;">Reset Passsword</h2>
+                        <div class="alert alert-danger alert-dismissible" style="display:none;" id="err"></div>
+                        <div class="alert alert-success alert-dismissible" style="display:none;" id="suc"></div>
+                        <div class="form-group"><label class="col-md-12 control-label" for="passwordinput">Password <span id="popover-password-top" class="hide pull-right block-help"><i class="fa fa-info-circle text-danger" aria-hidden="true"></i>Enter a strong password</span></label>
+                            <div class="col-md-12"><input id="password" name="password" type="password" placeholder="" class="form-control input-md" data-placement="bottom" data-toggle="popover" data-container="body" type="button" data-html="true">
+                                <div id="popover-password">
+                                    <p>Password Strength:<span id="result"></span></p>
+                                    <div class="progress">
+                                        <div id="password-strength" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li class=""><span class="low-upper-case"><img src="../../assets/images/file.png"/></span>&nbsp; 1 lowercase &amp; 1 uppercase</li>
+                                        <li class=""><span class="one-number"><img src="../../assets/images/file.png"/></span>&nbsp;1 number (0-9)</li>
+                                        <li class=""><span class="one-special-char"><img src="../../assets/images/file.png"/></span>&nbsp;1 Special Character (!@#$%^&*).</li>
+                                        <li class=""><span class="eight-character"><img src="../../assets/images/file.png"/></span>&nbsp; Atleast 8 Character</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-md-12 control-label" for="passwordinput">Password Confirmation <span id="popover-cpassword" class="hide pull-right block-help"><i class="fa fa-info-circle text-danger" aria-hidden="true"></i>Password don't match</span></label>
+                            <div class="col-md-12"><input id="confirm-password" name="new_password" type="password" placeholder="" class="form-control input-md"></div><input type="hidden" name="fun" value="pass_reset"><input type="hidden" name="email" value=""><input type="hidden" name="key" value=""><input type="hidden" name="type" value="">
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12"><button class="btn btn-primary btn-block" disabled id="reset-bt">Reset</button></div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="copyright" style="text-align:center;">&copy; <script>
+                    document.write(new Date().getFullYear());
+                </script> Server Health Monitor , <span>Developed by <a href="http://senthilnasa.me/" target="_blank">Senthil Nasa</a></span>.</div>
+        </div>
+    </footer>
+    </div>
+    
+    <script src="../../assets/js/jquery.min.js"></script>
+    <script src="../../assets/js/script.js"></script>
+    <script src="../../assets/js/forget.js"></script>
