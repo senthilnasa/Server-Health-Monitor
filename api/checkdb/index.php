@@ -69,6 +69,7 @@ function addDatabase()
  
   $sql = "USE `" . DB_NAME . "`;
 
+  SET FOREIGN_KEY_CHECKS=0 ;
   DROP TABLE IF EXISTS `config`;
 
   CREATE TABLE `config` (
@@ -198,10 +199,7 @@ function addDatabase()
   ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
   
 
-  /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-  /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-  /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-  /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+    set FOREIGN_KEY_CHECKS=1;
   
   ";
 
