@@ -59,7 +59,7 @@ function pass_reset($email,$key,$password){
 function log_user($db, $id, $state)
 {
 	$ip = get_client_ip();
-	$db->insert("INSERT INTO user_login_log(user_id,state,url) VALUES((SELECT `user_id` FROM user_master WHERE user_name=?),?,?)", [$id, $state, $ip]);
+	$db->insert("INSERT INTO user_login_log(user_id,state,ip) VALUES((SELECT `user_id` FROM user_master WHERE user_name=?),?,?)", [$id, $state, $ip]);
 }
 
 function salt($length = 10)

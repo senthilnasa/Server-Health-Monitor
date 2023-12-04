@@ -116,8 +116,8 @@ function set_page(list) {
 
     $('#server_title1').html('Details of ' + list.server_name);
     $('#server_title2').html(list.server_name);
-    $('#server_url').attr("href", list.ip);
-    $('#server_url').html(list.ip.substr(0, 12) + ' ..');
+    $('#server_url').attr("href", list.url);
+    $('#server_url').html(list.url.substr(0, 12) + ' ..');
     $('#server_live').html('Offline');
     $('#server_state').html('<i class="material-icons">close</i>');
     $('#server_type').html(list.type);

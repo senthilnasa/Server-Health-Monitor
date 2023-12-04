@@ -1,9 +1,9 @@
 <?php
 // error_reporting(0);
 // @ini_set('display_errors', 0);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 switch ($_POST['fun']) {
   case 'test_db':
     $host = $_POST['d1'];
@@ -26,7 +26,7 @@ switch ($_POST['fun']) {
       define ('DB_PORT', '" . $port . "' ); //Provide the Port where Mysql server is found
       define ('DB_USER', '" . $username . "' );//Provide the UserId of Mysql server 
       define ('DB_PASSWORD', '" . $password . "' );//Provide the Password of Mysql server
-      define ('DB_NAME', '" . $db . "' );//Provide the DB Name of Mysql server
+      define ('DB_NAME', '" . $dbname . "' );//Provide the DB Name of Mysql server
       ?>";
       $res['ok'] = true;
       comp($res);
@@ -55,7 +55,7 @@ switch ($_POST['fun']) {
     check(['uname', 'name', 'mail', 'pass'], 'Invalid Request');
     extract($_POST);
     
-    if ($db->insert("insert into user_master(user_name,name,email,salt,password,role) value(?,?,?,?,SHA1(SHA1(MD5(CONCAT(?,?,?)))),0)", [$uname, $name, $mail, $salt, $salt, $pass, $salt])) {
+    if ($db->insert("insert into user_master(user_name,name,email,salt,password,role) value(?,?,?,?,SHA1(SHA1(MD5(CONCAT(?,?,?)))),1)", [$uname, $name, $mail, $salt, $salt, $pass, $salt])) {
      complete(true);
     }
     err("Error Occured in creating user");
@@ -116,7 +116,7 @@ function addDatabase()
     `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
     `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     PRIMARY KEY (`server_id`)
-  ) ENGINE=InnoDB =1 DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
   
   INSERT  INTO `server_master`(`server_id`,`server_name`,`url`,`type`,email,`telegram`,`live`,`state`,`created_at`,`updated_at`) VALUES 
@@ -157,7 +157,7 @@ function addDatabase()
     `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
     PRIMARY KEY (`user_id`),
     UNIQUE KEY `unique_username` (`user_name`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
   ";
 
@@ -167,7 +167,7 @@ function addDatabase()
     comp($res);
   } else {
     $res['ok'] = false;
-    $res['err'] = "Grant all access to user '" . DB_USER . "' to proceed !";
+    $res['err'] = "Grant all access to user '" . DB_USER . "' for database '" . DB_NAME . " to continue";
     comp($res);
   }
   $mysqli->close();

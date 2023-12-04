@@ -2,7 +2,7 @@
 date_default_timezone_set("Asia/Kolkata");
 
 header('X-Frame-Options: SAMEORIGIN');
-header('X-Powered-By: senthilnasa.site');
+header('X-Powered-By: senthilnasa.me');
 $_home = '/';
 $http = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
 $_path = $http . $_SERVER['HTTP_HOST'] . $_home;

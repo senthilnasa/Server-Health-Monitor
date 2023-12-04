@@ -11,6 +11,27 @@
             configDiv.fadeIn(500);
         }
 
+        function checkConfig() {
+            configFileDiv.hide();
+            loadTab.fadeIn();
+            let data = {
+                'fun': 'db_add',
+            };
+
+            let func = (data) => {
+                toast('Installed and Configured Database Success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }
+            let err = () => {
+                configFileDiv.fadeIn();
+                loadTab.hide();
+            }
+
+            ajax('../api/checkdb/', data, func, err);
+        }
+
         function verfiyDbConfig() {
 
             d1 = $('#d1').val();
@@ -106,7 +127,7 @@
                location.reload();
             }
             let err = () => {
-                configDiv.fadeIn();
+                configAdminUserDiv.fadeIn();
                 loadTab.hide();
             }
             ajax('../api/checkdb/', data, func, err);
@@ -127,7 +148,6 @@
             };
 
             let func = (data) => {
-
                 toast('Installed Success');
                 setTimeout(() => {
                     window.location.reload();

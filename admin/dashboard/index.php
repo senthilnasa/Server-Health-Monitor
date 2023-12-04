@@ -112,7 +112,7 @@ heads();
 
     <div id="server_modal" class="modal">
         <div class="modal-content">
-            <h4 id="server_title">Bitsathy Server</h4>
+            <h4 id="server_title">Server Health Monitor</h4>
 
             <div>
 

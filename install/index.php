@@ -102,6 +102,9 @@ require_once __DIR__ . "/check.php";
                                 <br>
                             </p>
                             <textarea id="config" style="height: 900px;resize: none; overflow: hidden; max-height: 250px;" readonly></textarea>
+                            <br>
+                            <br>
+                            <button onclick="checkConfig();" class="waves-effect waves-light btn"><i class="material-icons right">double_arrow</i>Check Config</button>
 
                         </div>
 
@@ -169,6 +172,7 @@ require_once __DIR__ . "/check.php";
                                 Sweet, your database connection is up and running!
                                 <br>
                                 <br>
+
                                 Next, please set up a new account to access your monitor:
 
                                 <br>

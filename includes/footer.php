@@ -1,6 +1,6 @@
 <footer class="page-footer blue">
     <div class="container">
-            © <script>document.write(new Date().getFullYear()); </script> BITSATHY Server
+            © <script>document.write(new Date().getFullYear()); </script> Server Health Monitor
             <a class="grey-text text-lighten-4 right" href="http://sethilnasa.site/">Senthil Nasa</a>
     </div>
 </footer>

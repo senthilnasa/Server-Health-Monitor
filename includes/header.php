@@ -18,7 +18,7 @@
             <nav class="white ">
                 <div class="nav-wrapper">
                     <a class="brand-logo center ">
-                        <h5 class="black-text flow-text">Bitsathy Server Monitor</h5>
+                        <h5 class="black-text flow-text">Server Health Monitor</h5>
                     </a>
                     <ul class="right hide-on-med-and-down">
                         <li><a href="../../auth/logout/" class="blue-grey-text text-darken-4 "><i class="material-icons">login</i></a></li>
