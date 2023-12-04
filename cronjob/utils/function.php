@@ -186,22 +186,36 @@ function send_mail_warn(string $subject, string $body)
 		$html_body = "<div>This is a mail from Php sever Monitor<br></div>" . $body . "<br>By <a href='https://senthilnasa.me' target='_blank'>senthil nasa</a>";
 		$body = "This is a mail from Php sever Monitor" . $body . "From senthil nasa";
 		$db = new CRUD;
-		$datas = $db->select("SELECT * FROM config WHERE `key` IN('mail_password','mail_port','mail_port','mail_host','mail_id')",[]);
-		$data=array();
-		foreach ($datas as $val) {
-		$data[]=$val['value'];
-		}
+		$datas = $db->select("SELECT key,value FROM config WHERE `key` IN('mail_password','mail_port','mail_host','mail_id') order by `key`", []);
+       $mailHost="";
+        $mailPort="";
+        $mailId="";
+        $mailPassword="";
+        foreach ($datas as $data) {
+            if($data['key']=='mail_host'){
+                $mailHost=$data['value'];
+            }
+            if($data['key']=='mail_port'){
+                $mailPort=$data['value'];
+            }
+            if($data['key']=='mail_id'){
+                $mailId=$data['value'];
+            }
+            if($data['key']=='mail_password'){
+                $mailPassword=$data['value'];
+            }
+        }
+
 		$mail->isSMTP();
-		$mail->Host = $data[3];
+		$mail->Host = $mailHost;
 		$mail->SMTPAuth = true;
 		$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-		$mail->Port = $data[2];
-		$mail->Username = $data[0];
-		$mail->Password = $data[1];
+		$mail->Port = $mailPort;
+		$mail->Username = $mailId;
+		$mail->Password = $mailPassword;
 		
-		$mail->setFrom('severs@senthilnasa.me', 'Php Server Monitor');
-        $to = $db->select("SELECT email FROM user_master ",[]);
-		foreach ($to as $t) {
+		$mail->setFrom($mailId, 'Php Server Monitor');
+		foreach ($db->select("SELECT email FROM user_master ",[]) as $t) {
 			$mail->addAddress($t['email'], 'Admin');
 		}
 		$mail->IsHTML(true);
@@ -209,6 +223,7 @@ function send_mail_warn(string $subject, string $body)
 		$mail->Body = $html_body;
 		$mail->AltBody = $body;
 		$mail->send();
+        $iquery="INSERT INTO mail_log(`subject`,`body`,`status`) VALUES(?,?,?)";
 		
 		return true;
 	} catch (Exception $e) {

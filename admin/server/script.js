@@ -1,12 +1,10 @@
+if (typeof window !== 'undefined') {
 let l1;
 let l2;
-let historyShort;
-$('#minute').val(hourTime);
-$('#hour').val(dayTime);
-$('#day').val(weekTime);
-$('#day1').val(weeksTime);
-$('#week').val(monthTime);
-$('#month').val(yearTime);
+
+// on window load
+
+
 
 var parts = window.location.search.substr(1).split("&");
 var $_GET = {};
@@ -83,6 +81,14 @@ $("#edit_form").submit(function (e) {
 
 
 $(document).ready(() => {
+    // Configuring the datepicker
+    $('#minute').val(hourTime);
+$('#hour').val(dayTime);
+$('#day').val(weekTime);
+$('#day1').val(weeksTime);
+$('#week').val(monthTime);
+$('#month').val(yearTime);
+
     $('.modal').modal();
     $('.sidenav').sidenav();
     $(':button').prop('disabled', true);
@@ -93,8 +99,32 @@ $(document).ready(() => {
 
 
 function set_page(list) {
+    // {
+    //     "server_id": 1,
+    //     "server_name": "Senthil Nasa Website",
+    //     "url": "https:\/\/senthilnasa.me\/",
+    //     "type": "website",
+    //     "last_online": "2023-12-04 12:47:42",
+    //     "last_offline": null,
+    //     "last_output": "The site is working properly with Content Type - text\/html  Http Code -200",
+    //     "last_posstive": "The site is working properly with Content Type - text\/html  Http Code -200",
+    //     "last_error": null,
+    //     "live": 1,
+    //     "latency": 1.0319998999999999700349917475250549614429473876953125,
+    //     "email": 0,
+    //     "telegram": 0,
+    //     "state": 1,
+    //     "created_at": "2023-12-04 12:27:13",
+    //     "updated_at": "2023-12-04 12:47:42",
+    //     "method": null,
+    //     "post_field": null,
+    //     "header_name": null,
+    //     "header_value": null,
+    //     "user_name": null,
+    //     "port": null
+    // }
     $('[name=server_name]').val(list.server_name);
-    $('[name=url]').val(list.ip);
+    $('[name=url]').val(list.url);
     $("input[name*='header_name']" ).val(list.header_name);
     $("input[name*='header_value']" ).val(list.header_value);
     $("input[name*='port']" ).val(list.port);
@@ -493,4 +523,5 @@ function website_type() {
     di("port");
     $('#port').fadeOut(500);
     $('#web1').fadeIn(500);
+}
 }

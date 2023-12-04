@@ -246,7 +246,7 @@ function server_add_w($server_name,$ip,$type,$telegram,$state,$email,$threshold,
 function server_update($sid, $server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out)
 {
 	$db = new CRUD;
-	$db->update("UPDATE server_master SET `server_name`=?,url=?,`port`=NULL ,`type`=?,telegram=?,state=?,email=?,method=null,post_field=NULL,header_name=NULL,header_value=NULL,user_name=NULL,user_pass=NULL,redirect_type=0,threshold=?,`ssl`=0,time_out=? WHERE server_id=?", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out, $sid]);
+	$db->update("UPDATE server_master SET `server_name`=?,url=? ,`type`=?,telegram=?,state=?,email=?,method=null,post_field=NULL,header_name=NULL,header_value=NULL,user_name=NULL,user_pass=NULL,redirect_type=0,threshold=?,`ssl`=0,time_out=? WHERE server_id=?", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out, $sid]);
 	return true;
 }
 
@@ -260,8 +260,10 @@ function server_update_s($sid, $server_name, $ip, $type, $telegram, $state, $ema
 function server_update_w($sid,$server_name,$ip,$type,$telegram,$state,$email,$threshold,$time_out,$method,$post_field,$header_name,$header_value,$user_name,$user_pass,$redirect_type,$ssl)
 {
 	$db = new CRUD;
-	$db->update("UPDATE server_master SET `server_name`=?,url=?,`port`=NULL ,`type`=?,telegram=?,state=?,email=?,threshold=?,time_out=?,method=?,post_field=?,header_name=?,header_value=?,user_name=?,user_pass=?,redirect_type=?,`ssl`=? WHERE server_id=?",[$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$method,$post_field,$header_name,$header_value,$user_name,$user_pass,$redirect_type,$ssl, $sid]);
+	$db->update("UPDATE server_master SET `server_name`=?,url=?,`port=null` ,`type`=?,telegram=?,state=?,email=?,method=?,post_field=?,header_name=?,header_value=?,user_name=?,user_pass=?,redirect_type=?,`ssl`=?,threshold=?,time_out=? WHERE server_id=?", [$server_name, $ip, $type, $telegram, $state, $email,$method,$post_field,$header_name,$header_value,$user_name,$user_pass,$redirect_type,$ssl,$threshold,$time_out, $sid]);
+
 	return true;
+	
 }
 function server_delete($sid)
 {

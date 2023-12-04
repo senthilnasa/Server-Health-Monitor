@@ -1,8 +1,4 @@
 <?php
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-
 require_once __DIR__ . '/utils/init.php';
 
 $db = new CRUD;
@@ -59,7 +55,7 @@ foreach ($datas as $key => $data) {
         }
     }
 }
-$db->inserts("INSERT INTO server_ping_log(server_id,state,latency) values".implode(", ", $final),[]);
+$db->inserts("INSERT INTO server_ping_log(server_id,state,latency) values".implode(',',$final),[]);
 
 
 
@@ -129,3 +125,6 @@ $_m.='</table>';
 if($__m){
     send_mail_warn("List of servers Offline !", $_m);
 }
+// if($__t){
+//     send_telegram_warn($_t);
+// }
