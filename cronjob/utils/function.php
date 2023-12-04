@@ -92,14 +92,18 @@ function website(
     $t = $result['total_time'];
     if ($err == "") {
         $p = "The site is working properly with Content Type - " . $result['content_type'] . "  Http Code -" . $result['http_code'];
-        $db->update('UPDATE server_master SET last_online=NOW(),last_output=?,last_posstive=?,live=1,latency=? where server_id=?', [$p, $p, $t, $server_id]);
+        $db->update('UPDATE server_master SET last_online="'. getCurrentTime().'",last_output=?,last_posstive=?,live=1,latency=? where server_id=?', [$p, $p, $t, $server_id]);
     } else {
-        $db->update('UPDATE server_master SET last_offline=NOW(),last_output=?,last_error=?,live=0,latency=? where server_id=?', [$err, $err, $t, $server_id]);
+        $db->update('UPDATE server_master SET last_offline="'. getCurrentTime().'",last_output=?,last_error=?,live=0,latency=? where server_id=?', [$err, $err, $t, $server_id]);
     }
 
     return $result['total_time'];
 }
 
+function getCurrentTime()
+{
+    return date('Y-m-d H:i:s');
+}
 
 function ssl_check($curl_info, $expiry_days)
 {
@@ -166,9 +170,9 @@ function service_ping($host, $port, $timeout): float
 function server_update($db, $server_id, $res, $out)
 {
     if ($res) {
-        $db->update('UPDATE server_master SET last_online=NOW(), last_posstive=?,live=1,last_output=? WHERE server_id=?', [$out, $out, $server_id]);
+        $db->update('UPDATE server_master SET last_online="'. getCurrentTime().'", last_posstive=?,live=1,last_output=? WHERE server_id=?', [$out, $out, $server_id]);
     } else {
-        $db->update('UPDATE server_master SET last_offline=NOW(), last_output=?,live=0,last_error=? WHERE server_id=?', [$out, $out, $server_id]);
+        $db->update('UPDATE server_master SET last_offline="'. getCurrentTime().'", last_output=?,live=0,last_error=? WHERE server_id=?', [$out, $out, $server_id]);
     }
 }
 

@@ -59,7 +59,7 @@ function pass_reset($email,$key,$password){
 function log_user($db, $id, $state)
 {
 	$ip = get_client_ip();
-	$db->insert("INSERT INTO user_login_log(user_id,state,ip) VALUES((SELECT `user_id` FROM user_master WHERE user_name=?),?,?)", [$id, $state, $ip]);
+	$db->inserts("INSERT INTO user_login_log(user_id,state,ip) VALUES((SELECT `user_id` FROM user_master WHERE user_name=?),?,?)", [$id, $state, $ip]);
 }
 
 function salt($length = 10)
@@ -141,7 +141,7 @@ function user_add($uname, $mail, $name, $tid,$pass)
 {
 	$db = new CRUD;
 	$salt=salt(12);
-	if ($db->insert("insert into user_master(user_name,`name`,`email`,`telegram_id`,`salt`,password) value(?,?,?,?,?,SHA1(SHA1(MD5(CONCAT(?,?,?)))))", [$uname, $name, $mail, $tid,$salt,$salt,$pass,$salt])) {
+	if ($db->inserts("insert into user_master(user_name,`name`,`email`,`telegram_id`,`salt`,password) value(?,?,?,?,?,SHA1(SHA1(MD5(CONCAT(?,?,?)))))", [$uname, $name, $mail, $tid,$salt,$salt,$pass,$salt])) {
 		return true;
 	}
 	return 'Falied to add urser';
@@ -219,7 +219,7 @@ function server_report($sid)
 function server_add($server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out)
 {
 	$db = new CRUD;
-	if ($db->insert("INSERT INTO server_master(server_name,url,type,telegram,state,email,threshold,time_out) VALUES(?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out])) {
+	if ($db->inserts("INSERT INTO server_master(server_name,url,type,telegram,state,email,threshold,time_out) VALUES(?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out])) {
 		return true;
 	}
 	return false;
@@ -229,7 +229,7 @@ function server_add($server_name, $ip, $type, $telegram, $state, $email,$thresho
 function server_add_s($server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$port)
 {
 	$db = new CRUD;
-	if ($db->insert("INSERT INTO server_master(server_name,url,type,telegram,state,email,threshold,time_out,port) VALUES(?,?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$port])) {
+	if ($db->inserts("INSERT INTO server_master(server_name,url,type,telegram,state,email,threshold,time_out,port) VALUES(?,?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$port])) {
 		return true;
 	}
 	return false;
@@ -238,7 +238,7 @@ function server_add_s($server_name, $ip, $type, $telegram, $state, $email,$thres
 function server_add_w($server_name,$ip,$type,$telegram,$state,$email,$threshold,$time_out,$method,$post_field,$header_name,$header_value,$redirect_type,$ssl,$user_name,$user_pass)
 {
 	$db = new CRUD;
-	if ($db->insert("INSERT INTO server_master(server_name,url,type,telegram,state,email,threshold,time_out,method,post_field,header_name,header_value,redirect_type,`ssl`,`user_name`,`user_pass`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$method,$post_field,$header_name,$header_value,$redirect_type,$ssl,$user_name,$user_pass])) {
+	if ($db->inserts("INSERT INTO server_master(server_name,url,type,telegram,state,email,threshold,time_out,method,post_field,header_name,header_value,redirect_type,`ssl`,`user_name`,`user_pass`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [$server_name, $ip, $type, $telegram, $state, $email,$threshold,$time_out,$method,$post_field,$header_name,$header_value,$redirect_type,$ssl,$user_name,$user_pass])) {
 		return true;
 	}
 	return false;
