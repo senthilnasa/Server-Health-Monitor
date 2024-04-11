@@ -1,6 +1,6 @@
 <?php
 
- require __DIR__.'/../../includes/main.php';
+require __DIR__.'/../../includes/main.php';
 heads();
 ?>
 

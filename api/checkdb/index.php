@@ -1,75 +1,84 @@
 <?php
-
+// Switch to handle different POST requests based on 'fun' parameter
 switch ($_POST['fun']) {
+  // Test database connection
   case 'test_db':
+    // Retrieve connection parameters from POST request
     $host = $_POST['d1'];
     $port = $_POST['d2'];
     $username = $_POST['d3'];
     $password = $_POST['d4'];
     $dbname = $_POST['d5'];
+
+    // Initialize response array
     $res = array();
 
+    // Create mysqli object for database connection
     $mysqli = new mysqli($host, $username, $password, $dbname, $port);
 
+    // Check connection
     if ($mysqli->connect_errno) {
       $res['ok'] = false;
-      $res['err'] =
-        $mysqli->connect_error;
+      $res['err'] = $mysqli->connect_error;
       comp($res);
     } else {
-      $res['data'] = "<?php
-      define ('DB_HOST', '" . $host . "' ); //Provide the IP/Host where Mysql server is found
-      define ('DB_PORT', '" . $port . "' ); //Provide the Port where Mysql server is found
-      define ('DB_USER', '" . $username . "' );//Provide the UserId of Mysql server 
-      define ('DB_PASSWORD', '" . $password . "' );//Provide the Password of Mysql server
-      define ('DB_NAME', '" . $dbname . "' );//Provide the DB Name of Mysql server
-      ?>";
+      // On successful connection, return database connection details
+      $res['data'] = "<?php\n" .
+      "define('DB_HOST', '$host');\n" .
+      "define('DB_PORT', '$port');\n" .
+      "define('DB_USER', '$username');\n" .
+      "define('DB_PASSWORD', '$password');\n" .
+      "define('DB_NAME', '$dbname');\n" .
+      "?>";
       $res['ok'] = true;
       comp($res);
     }
+
+    // Close database connection
     $mysqli->close();
     break;
 
-
+  // Handle database addition
   case 'db_add':
     addDatabase(true);
-
     break;
 
+  // Handle user addition
   case 'add_user':
     checkDb(true);
-
     require_once __DIR__ . '/../includes/init.php';
-    $db = new CRUD;
+    $db = new CRUD();
 
+    // Check if user already exists
     if ($db->select("SELECT count(m.`name`) c FROM user_master m")[0]['c'] > 0) {
       $res['ok'] = false;
-      $res['err'] = "User Already Exists !";
+      $res['err'] = "User Already Exists!";
       comp($res);
     }
+
+    // Generate a salt for password hashing
     $salt = salt(12);
     check(['uname', 'name', 'mail', 'pass'], 'Invalid Request');
     extract($_POST);
-    
-    if ($db->insert("insert into user_master(user_name,name,email,salt,password,role) value(?,?,?,?,SHA1(SHA1(MD5(CONCAT(?,?,?)))),1)", [$uname, $name, $mail, $salt, $salt, $pass, $salt])) {
-     complete(true);
+
+    // Insert new user into the database
+    if ($db->insert("INSERT INTO user_master(user_name, name, email, salt, password, role) VALUES (?, ?, ?, ?, SHA1(SHA1(MD5(CONCAT(?, ?, ?)))), 1)", [$uname, $name, $mail, $salt, $salt, $pass, $salt])) {
+      complete(true);
     }
-    err("Error Occured in creating user");
+    err("Error Occurred in creating user");
     break;
 
+  // Default case for invalid 'fun' parameter
   default:
     require '../includes/nono.html';
 }
 
-
-function addDatabase()
-{
-  $mysqli= checkDb(false);
- 
- 
-  $sql = "USE `" . DB_NAME . "`;
-
-  SET FOREIGN_KEY_CHECKS=0 ;
+// Function to add database
+function addDatabase() {
+  $mysqli = checkDb(false);
+  // Database creation and table initialization SQL
+  // This should ideally be placed in a separate SQL file for better maintenance
+  $sql = "SET FOREIGN_KEY_CHECKS=0 ;
   DROP TABLE IF EXISTS `config`;
 
   CREATE TABLE `config` (
@@ -199,9 +208,7 @@ function addDatabase()
   ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
   
 
-    set FOREIGN_KEY_CHECKS=1;
-  
-  ";
+    set FOREIGN_KEY_CHECKS=1;";
 
   $res = array();
   if ($mysqli->multi_query($sql)) {
@@ -209,21 +216,21 @@ function addDatabase()
     comp($res);
   } else {
     $res['ok'] = false;
-    $res['err'] = "Grant all access to user '" . DB_USER . "' for database '" . DB_NAME . " to continue";
+    $res['err'] = "Grant all access to user '" . DB_USER . "' for database '" . DB_NAME . "' to continue";
     comp($res);
   }
   $mysqli->close();
 }
 
-function checkDb($a)
-{
+// Function to check database connection
+function checkDb($a) {
   if (!file_exists(__DIR__ . "/../../config.php")) {
     $res['ok'] = false;
-    $res['err'] = "File is not Found config.php in not found home Directory";
+    $res['err'] = "File not Found: config.php is not found in the home directory";
     comp($res);
   }
- require __DIR__ . "/../../config.php";
-  $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME,DB_PORT);
+  require __DIR__ . "/../../config.php";
+  $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT);
 
   if ($mysqli->connect_errno) {
     $res['ok'] = false;
@@ -236,10 +243,11 @@ function checkDb($a)
   }
   return $mysqli;
 }
-function comp($res)
-{
+
+// Function to complete the response and exit
+function comp($res) {
   header('Content-type: application/json');
   echo json_encode($res);
-  die();
+  exit;
 }
-
+?>

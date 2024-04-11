@@ -58,20 +58,11 @@ function pass_reset($email,$key,$password){
 
 function log_user($db, $id, $state)
 {
-	$ip = get_client_ip();
+	$ip = getUserIP();
 	$db->inserts("INSERT INTO user_login_log(user_id,state,ip) VALUES((SELECT `user_id` FROM user_master WHERE user_name=?),?,?)", [$id, $state, $ip]);
 }
 
-function salt($length = 10)
-{
-	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	$charactersLength = strlen($characters);
-	$randomString = '';
-	for ($i = 0; $i < $length; $i++) {
-		$randomString .= $characters[rand(0, $charactersLength - 1)];
-	}
-	return $randomString;
-}
+
 
 
 //Data Function

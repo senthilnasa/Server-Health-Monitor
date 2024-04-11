@@ -1,3 +1,3 @@
 <?php
 
-require'includes/nono.html';
+require 'includes/nono.html';

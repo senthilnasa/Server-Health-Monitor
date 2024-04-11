@@ -1,31 +1,32 @@
 <?php
+
 require_once __DIR__ . '/../includes/init.php';
-check('fun','Type Required');
-extract($_POST);
-switch($fun) {
+require_once __DIR__ . '/functions.php';
+
+
+check('fun', 'Type Required');
+$fun = $_POST['fun'];
+
+switch ($fun) {
     case 'verify_login':
-    check(['login','pass'],'Invalid Request !');   
-    extract($_POST);
-    verify_login($login,$pass);
-    break;
+        check(['login', 'pass'], 'Invalid Request!');
+        verify_login($_POST['login'], $_POST['pass']);
+        break;
 
     case 'reset_pass':
-    check('login','Invalid Request !');
-    extract($_POST);
-    reset_login($login);
-    break;
+        check('login', 'Invalid Request!');
+        reset_login($_POST['login']);
+        break;
 
     case 'pass_reset':
-    check(['email','key','password','new_password',],'Invalid Request !');   
-    extract($_POST);
-    if($password!=$new_password){
-        err('Both password should same !');
-    }
-    pass_reset($email,$key,$password);
-    break;
-    // echo send_mail('Test mail','Hello world', []);
-   
+        check(['email', 'key', 'password', 'new_password'], 'Invalid Request!');   
+        if ($_POST['password'] !== $_POST['new_password']) {
+            err('Both passwords should be the same!');
+        }
+        pass_reset($_POST['email'], $_POST['key'], $_POST['password']);
+        break;
+
     default:
-    err('Invalid Request');
-    die();
+        err('Invalid Request');
+        break;
 }

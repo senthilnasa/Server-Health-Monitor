@@ -1,147 +1,118 @@
 <?php
-
 require_once __DIR__ . '/response.php';
 require_once __DIR__ . '/_db.php';
 require_once __DIR__ . '/function.php';
 
-
-
+/**
+ * CRUD class for handling database operations.
+ */
 class CRUD
 {
-    private $db;
+    private mysqli $db;
 
     public function __construct()
     {
         $this->db = db();
     }
 
-    private function _getBinders(array $params = array()): array
+    /**
+     * Generates a string of types for bind_param function based on the parameters provided.
+     *
+     * @param array $params Parameters for SQL query.
+     * @return array Array containing types and the parameters.
+     */
+    private function _getBinders(array $params): array
     {
         $bind = '';
         foreach ($params as $param) {
-            $type = gettype($param);
-            if ($type == 'double') $bind .= 'd';
-            else if ($type == 'integer') $bind .= 'd';
-            else $bind .= 's';
+            $bind .= gettype($param) == 'double' || gettype($param) == 'integer' ? 'd' : 's';
         }
-        $a_params[] = $bind;
-        for ($i = 0; $i < count($params); $i++) {
-            $a_params[] = $params[$i];
-        }
-        return $a_params;
+
+        return array_merge([$bind], $params);
     }
 
-    public function select(string $query, array $params = array()): array
+    /**
+     * Executes a SELECT query with optional parameters.
+     *
+     * @param string $query SQL query.
+     * @param array $params Parameters to bind to the query.
+     * @return array Result set.
+     */
+    public function select(string $query, array $params = []): array
     {
+        $data = [];
         try {
             $stmt = $this->db->prepare($query);
-            if (count($params) > 0) {
-                $temp = $this->_getBinders($params);
-                $binder = array();
-                for ($i = 0; $i < count($temp); $i++) {
-                    $binder[] = &$temp[$i];
-                }
-                call_user_func_array(array($stmt, 'bind_param'), $binder);
+            if ($params) {
+                $stmt->bind_param(...$this->_getBinders($params));
             }
             $stmt->execute();
             $result = $stmt->get_result();
+            $data = $result->fetch_all(MYSQLI_ASSOC);
             $stmt->close();
-            $data = array();
-            while ($row = mysqli_fetch_assoc($result)) {
-                $data[] = $row;
-            }
         } catch (\Throwable $th) {
+            echo "Query: $query\n";
+
             err($th->getMessage());
-        } catch (\Error $e) {
-            err($e->getMessage());
-        } catch (\Exception $e) {
-            err($e->getMessage());
         }
+
         return $data;
     }
 
-    public function insert(string $query, array $params = array()): int
+    /**
+     * Executes an INSERT query and returns the inserted ID.
+     *
+     * @param string $query SQL query.
+     * @param array $params Parameters for the query.
+     * @return int Last inserted ID.
+     */
+    public function insert(string $query, array $params = []): int
     {
-        $insertId = 0;
-        try {
-            $stmt = $this->db->prepare($query);
-            if (count($params) > 0) {
-                $temp = $this->_getBinders($params);
-                $binder = array();
-                for ($i = 0; $i < count($temp); $i++) {
-                    $binder[] = &$temp[$i];
-                }
-                call_user_func_array(array($stmt, 'bind_param'), $binder);
-            }
-            $stmt->execute();
-            $insertId = $stmt->insert_id;
-            $stmt->close();
-        } catch (\Throwable $th) {
-            err($th->getMessage());
-        } catch (\Error $e) {
-            err($e->getMessage());
-        } catch (\Exception $e) {
-            err($e->getMessage());
-        }
-        return  $insertId;
+        return $this->_executeWriteQuery($query, $params);
     }
 
-    public function inserts(string $query, array $params = array()): int
+    /**
+     * Executes an INSERT/UPDATE/DELETE query and returns the number of affected rows.
+     *
+     * @param string $query SQL query.
+     * @param array $params Parameters for the query.
+     * @return int Number of rows affected.
+     */
+    public function update(string $query, array $params = []): int
     {
-        $insertId = 0;
-        try {
-            $stmt = $this->db->prepare($query);
-            if (count($params) > 0) {
-                $temp = $this->_getBinders($params);
-                $binder = array();
-                for ($i = 0; $i < count($temp); $i++) {
-                    $binder[] = &$temp[$i];
-                }
-                call_user_func_array(array($stmt, 'bind_param'), $binder);
-            }
-            $stmt->execute();
-            $insertId = $stmt->affected_rows;
-            $stmt->close();
-        } catch (\Throwable $th) {
-            err($th->getMessage());
-        } catch (\Error $e) {
-            err($e->getMessage());
-        } catch (\Exception $e) {
-            err($e->getMessage());
-        }
-        return  $insertId;
+        return $this->_executeWriteQuery($query, $params);
     }
 
-    public function update(string $query, array $params = array()): int
+    /**
+     * A private method to handle INSERT, UPDATE, DELETE operations.
+     *
+     * @param string $query SQL query.
+     * @param array $params Parameters for the query.
+     * @return int The last inserted ID or the number of affected rows.
+     */
+    private function _executeWriteQuery(string $query, array $params): int
     {
-        $affectedRows = 0;
+        $result = 0;
         try {
             $stmt = $this->db->prepare($query);
-            if (count($params) > 0) {
-                $temp = $this->_getBinders($params);
-                $binder = array();
-                for ($i = 0; $i < count($temp); $i++) {
-                    $binder[] = &$temp[$i];
-                }
-                call_user_func_array(array($stmt, 'bind_param'), $binder);
+            if ($params) {
+                $stmt->bind_param(...$this->_getBinders($params));
             }
             $stmt->execute();
-            $affectedRows = $stmt->affected_rows;
+            $result = $stmt->affected_rows;
             $stmt->close();
         } catch (\Throwable $th) {
+            echo "Query: $query\n";
             err($th->getMessage());
-        } catch (\Error $e) {
-            err($e->getMessage());
-        } catch (\Exception $e) {
-            err($e->getMessage());
         }
-        return $affectedRows;
+
+        return $result;
     }
 
     public function __destruct()
     {
-        if ($this->db != null) {
-            $this->db->close();
-        }
+        $this->db->close();
     }
 }
+
+

@@ -134,7 +134,7 @@ switch ($fun) {
         check('email', 'email Required',true);
         check('threshold', 'threshold Required',true);
         extract($_POST);
-        
+        echo json_encode($_POST);
         $data=server_add($server_name,$url,$type,$telegram,$state,$email,$threshold,$time_out); 
         }
         if($type=="service"){

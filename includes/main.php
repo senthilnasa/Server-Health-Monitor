@@ -14,6 +14,7 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
+
 extract($_REQUEST);
 
 
@@ -26,10 +27,14 @@ function footer()
 {
     require 'footer.php';
 }
-// if (in_array('admin', explode('/', $_SERVER['REQUEST_URI']))) {
-//     if (!isset($_SESSION['mail'])) {
-//         header('Location:/auth/', true);
-//         die();
-//     }
-// }
+
+function getGlobalPath() {
+    return $GLOBALS['_path'];
+}
+
+
+if (in_array('admin', explode('/', $_SERVER['REQUEST_URI'])) && !isset($_SESSION['islogin'])) {
+        header('Location:/auth/', true);
+        die();
+}
 
